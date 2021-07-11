@@ -9,8 +9,10 @@ public class GameManager : MonoBehaviour
     private int playerScore = 0;
     public delegate void gameEvent();
     public static event gameEvent OnPlayerDeath;
-    public static event gameEvent OnEnemyPoolReady;
 
+    public GameObject AudioTheme;
+    public GameObject DyingSFX;
+    public GameObject CoinSFX;
     public void increaseScore()
     {
         playerScore += 1;
@@ -25,4 +27,21 @@ public class GameManager : MonoBehaviour
     // public void poolReady(){
     //     OnEnemyPoolReady();
     // }
+
+    public void stopTheme()
+    {
+        AudioTheme.GetComponent<AudioSource>().Stop();
+    }
+
+    public void playDyingSFX()
+    {
+        AudioSource sfx = DyingSFX.GetComponent<AudioSource>();
+        sfx.PlayOneShot(sfx.clip);
+    }
+
+    public void playCoinSFX()
+    {
+        AudioSource sfx = CoinSFX.GetComponent<AudioSource>();
+        sfx.PlayOneShot(sfx.clip);
+    }
 }

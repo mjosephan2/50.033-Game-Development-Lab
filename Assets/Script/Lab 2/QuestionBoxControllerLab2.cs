@@ -45,5 +45,7 @@ public class QuestionBoxControllerLab2 : MonoBehaviour
         //reset box position
         this.transform.localPosition = Vector3.zero;
         springJoint.enabled = false; // disable spring
+
+        // set active
     }
 }

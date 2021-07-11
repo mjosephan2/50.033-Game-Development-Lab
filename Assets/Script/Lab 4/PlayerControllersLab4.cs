@@ -15,8 +15,8 @@ public class PlayerControllersLab4 : MonoBehaviour
     private Material originalMat;
     private int score = 0;
     public float speed;
-    public float maxSpeed = 30;
-    public float upSpeed = 20;
+    public float maxSpeed;
+    public float upSpeed;
     public Material shader;
     public Transform enemies;
     public Transform enemyLocation;
@@ -24,6 +24,7 @@ public class PlayerControllersLab4 : MonoBehaviour
     public MenuControllerLab2 startScreen;
     public GameOverControllerLab2 gameOverScreen;
 
+    public GameConstants gameConstants;
     void Awake()
     {
 
@@ -37,6 +38,7 @@ public class PlayerControllersLab4 : MonoBehaviour
         marioAnimator = GetComponent<Animator>();
         marioAudio = GetComponent<AudioSource>();
         originalMat = marioSprite.material;
+
         GameManager.OnPlayerDeath += PlayerDiesSequence;
         int restartCounter = GameState.getRestartCount();
         Debug.Log("Starting game");
@@ -46,7 +48,13 @@ public class PlayerControllersLab4 : MonoBehaviour
         {
             startScreen.StartButtonClicked();
         }
+        setGameConstants();
+    }
 
+    void setGameConstants(){
+        speed = gameConstants.speed;
+        maxSpeed = gameConstants.maxSpeed;
+        upSpeed = gameConstants.upSpeed;
     }
     // FixedUpdate may be called once per frame. See documentation for details.
     void FixedUpdate()
@@ -121,12 +129,13 @@ public class PlayerControllersLab4 : MonoBehaviour
     //         gameOverScreen.setup(score);
     //     }
     // }
+
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown("a") && faceRightState)
         {
-            Debug.Log("face right");
+            // Debug.Log("face right");
             faceRightState = false;
             marioSprite.flipX = true;
             if (Mathf.Abs(marioBody.velocity.x) > 1.0)
@@ -135,7 +144,7 @@ public class PlayerControllersLab4 : MonoBehaviour
 
         if (Input.GetKeyDown("d") && !faceRightState)
         {
-            Debug.Log("face left");
+            // Debug.Log("face left");
             faceRightState = true;
             marioSprite.flipX = false;
             if (Mathf.Abs(marioBody.velocity.x) > 1.0)
@@ -153,6 +162,15 @@ public class PlayerControllersLab4 : MonoBehaviour
                 Debug.Log(score);
             }
         }
+        if (Input.GetKeyDown("z"))
+        {
+            CentralManager.centralManagerInstance.consumePowerup(KeyCode.Z, this.gameObject);
+        }
+
+        if (Input.GetKeyDown("x"))
+        {
+            CentralManager.centralManagerInstance.consumePowerup(KeyCode.X, this.gameObject);
+        }
     }
 
     void PlayJumpSound()
@@ -166,5 +184,13 @@ public class PlayerControllersLab4 : MonoBehaviour
         Debug.Log("Mario dies");
         // do whatever you want here, animate etc
         // ...
+
+        // stop theme
+        CentralManager.centralManagerInstance.stopTheme();
+
+        // start dying audio
+        CentralManager.centralManagerInstance.playDyingSFX();
+        // just dissapear
+        gameObject.SetActive(false);
     }
 }

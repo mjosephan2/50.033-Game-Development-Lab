@@ -91,7 +91,7 @@ TextureImporter:
     second: items_28
   - first:
       213: 21300058
-    second: items_29
+    second: items_orange
   - first:
       213: 21300060
     second: items_30
@@ -136,7 +136,7 @@ TextureImporter:
     second: items_43
   - first:
       213: 21300088
-    second: items_44
+    second: items_red
   - first:
       213: 21300090
     second: items_45
@@ -2014,7 +2014,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: items_29
+      name: items_orange
       rect:
         serializedVersion: 2
         x: 16
@@ -2329,7 +2329,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: items_44
+      name: items_red
       rect:
         serializedVersion: 2
         x: 288

@@ -8,11 +8,13 @@ public class EnemyControllerLab4 : MonoBehaviour
     private float originalX;
     private Vector2 velocity;
     private Rigidbody2D enemyBody;
-
+    private AudioSource audioStomp;
+    private bool Rejoice;
+    private bool Dying;
     void Start()
     {
         enemyBody = GetComponent<Rigidbody2D>();
-
+        audioStomp = GetComponent<AudioSource>();
         // get the starting position
         originalX = transform.position.x;
 
@@ -20,6 +22,7 @@ public class EnemyControllerLab4 : MonoBehaviour
         moveRight = Random.Range(0, 2) == 0 ? -1 : 1;
         // subscribe to player event
         GameManager.OnPlayerDeath += EnemyRejoice;
+        Rejoice = false;
         // compute initial velocity
         ComputeVelocity();
     }
@@ -36,7 +39,14 @@ public class EnemyControllerLab4 : MonoBehaviour
 
     void Update()
     {
-        if (Mathf.Abs(enemyBody.position.x - originalX) < gameConstants.maxOffset)
+        if (Rejoice)
+        {
+            // keep changing direction
+            moveRight *= -1;
+            ComputeVelocity();
+            MoveEnemy();
+        }
+        else if (Mathf.Abs(enemyBody.position.x - originalX) < gameConstants.maxOffset)
         {// move gomba
             MoveEnemy();
         }
@@ -49,35 +59,46 @@ public class EnemyControllerLab4 : MonoBehaviour
         }
     }
 
-void  OnTriggerEnter2D(Collider2D other){
-	// check if it collides with Mario
-	if (other.gameObject.tag  ==  "Player"){
-		// check if collides on top
-		float yoffset = (other.transform.position.y  -  this.transform.position.y);
-		if (yoffset  >  0.75f){
-			KillSelf();
-		}
-		else{
-			// hurt player
-			CentralManager.centralManagerInstance.damagePlayer();
-		}
-	}
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        // check if it collides with Mario
+        if (other.gameObject.tag == "Player")
+        {
+            // check if collides on top
+            float yoffset = (other.transform.position.y - this.transform.position.y);
+            if (yoffset > 0.75f)
+            {
+                KillSelf();
+                gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            }
+            else
+            {
+                // hurt player
+                CentralManager.centralManagerInstance.damagePlayer();
+            }
+        }
 
-    // check if collides with pipe
-    if (other.gameObject.tag == "Pipe"){
-        // change direction?
-        moveRight *= -1;
+        // // check if collides with pipe
+        // if (other.gameObject.tag == "Pipe")
+        // {
+        //     // change direction?
+        //     moveRight *= -1;
+        // }
     }
-}
 
     void KillSelf()
     {
         // enemy dies
+        startAudioStomp();
         CentralManager.centralManagerInstance.increaseScore();
         StartCoroutine(flatten());
         Debug.Log("Kill sequence ends");
     }
 
+    void startAudioStomp()
+    {
+        audioStomp.PlayOneShot(audioStomp.clip);
+    }
     IEnumerator flatten()
     {
         Debug.Log("Flatten starts");
@@ -103,5 +124,8 @@ void  OnTriggerEnter2D(Collider2D other){
         Debug.Log("Enemy killed Mario");
         // do whatever you want here, animate etc
         // ...
+
+        // do some animation? move back and forth
+        Rejoice = true;
     }
 }

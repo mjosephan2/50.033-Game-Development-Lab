@@ -2,7 +2,7 @@ using UnityEngine;
 public class BreakBrickLab3 : MonoBehaviour
 {
     public GameObject prefab;
-    private bool broken;
+    public bool broken;
     private AudioSource breakAudio;
     void Start(){
         broken = false;

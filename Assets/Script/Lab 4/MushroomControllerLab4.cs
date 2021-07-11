@@ -1,13 +1,15 @@
 using UnityEngine;
 
-public class MushroomControllerLab2 : MonoBehaviour
-{
+public class MushroomControllerLab4 : MonoBehaviour
+{	public  Texture t;
+    public int index;
     private Rigidbody2D mushroomBody;
     [SerializeField]
     private float constantSpeed;
     private Vector2 direction;
     public bool constantMove;
     private Collider2D bottomCollider;
+    private ConsumableInterface parentScript;
     void Start()
     {
         mushroomBody = GetComponent<Rigidbody2D>();
@@ -16,8 +18,10 @@ public class MushroomControllerLab2 : MonoBehaviour
         bottomCollider = gameObject.transform.GetChild(0).GetComponent<BoxCollider2D>();
 
         // intial is right
-        direction = new Vector2(1,0);
+        direction = new Vector2(1, 0);
         constantMove = false;
+
+        parentScript = transform.parent.GetComponent<ConsumableInterface>();
     }
     void Update()
     {
@@ -34,11 +38,11 @@ public class MushroomControllerLab2 : MonoBehaviour
         {
             mushroomBody.velocity = new Vector2(0, 0);
             constantMove = false;
-        }
-        if (col.gameObject.CompareTag("Ground") || col.gameObject.CompareTag("Obstacle"))
-        {
-            mushroomBody.velocity = direction * constantSpeed;
-            constantMove = true;
+
+            CentralManager.centralManagerInstance.addPowerup(t, index, parentScript);
+            GetComponent<Collider2D>().enabled = false;
+            gameObject.SetActive(false);
+
         }
         if (col.gameObject.CompareTag("Pipe"))
         {
@@ -51,6 +55,11 @@ public class MushroomControllerLab2 : MonoBehaviour
 
     }
 
+    public void setConstantSpeed()
+    {
+        mushroomBody.velocity = direction * constantSpeed;
+        constantMove = true;
+    }
     // void OnBecameInvisible()
     // {
     //     Destroy(gameObject);

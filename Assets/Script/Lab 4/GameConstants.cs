@@ -33,4 +33,11 @@ public class GameConstants : ScriptableObject
     public float groundSurface = -1;
     public float maxOffset = 5;
     public float enemyPatroltime = 2;
+
+    public float spawnStart = -11;
+    public float spawnEnd = -3;
+
+    public float speed = 30;
+    public float maxSpeed = 40;
+    public float upSpeed = 25;
 }

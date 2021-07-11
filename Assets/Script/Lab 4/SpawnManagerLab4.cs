@@ -1,11 +1,13 @@
 using UnityEngine;
 public class SpawnManagerLab4 : MonoBehaviour
 {
-    float groundDistance = -1.0f;
+    public GameConstants gameConstants;
+    float groundDistance;
     void Start()
     {
         // wait until the all the pool manager is ready
         // GameManager.OnEnemyPoolReady += Initialize;
+        groundDistance = gameConstants.groundSurface;
         Initialize();
     }
 
@@ -24,7 +26,7 @@ public class SpawnManagerLab4 : MonoBehaviour
         {
             //set position
             item.transform.localScale = new Vector3(1, 1, 1);
-            item.transform.position = new Vector3(Random.Range(-4.5f, 4.5f), groundDistance + item.GetComponent<SpriteRenderer>().bounds.extents.y, 0);
+            item.transform.position = new Vector3(Random.Range(gameConstants.spawnStart, gameConstants.spawnEnd), groundDistance + item.GetComponent<SpriteRenderer>().bounds.extents.y, 0);
             item.SetActive(true);
         }
         else
@@ -36,6 +38,7 @@ public class SpawnManagerLab4 : MonoBehaviour
     public void spawnNewEnemy()
     {
 
+        Debug.Log("Spawning new enemy");
         ObjectType i = Random.Range(0, 2) == 0 ? ObjectType.gombaEnemy : ObjectType.starEnemy;
         spawnFromPooler(i);
 
